@@ -3,7 +3,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  mode: "production",
+  mode: "development",
   entry: "./src/index.ts",
   plugins: [
     new HtmlWebpackPlugin({
@@ -24,12 +24,20 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        use: ["awesome-typescript-loader"]
-      },
-      {
-        test: /\.scss$/,
-        use: ["style-loader", "css-loader", "sass-loader"]
+        oneOf: [
+          {
+            test: /\.tsx?$/,
+            use: ["awesome-typescript-loader"]
+          },
+          {
+            test: /\.scss$/,
+            use: ["style-loader", "css-loader", "sass-loader"]
+          },
+          {
+            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+            use: ["file-loader"]
+          }
+        ]
       }
     ]
   }

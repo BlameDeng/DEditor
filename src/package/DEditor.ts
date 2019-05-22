@@ -2,11 +2,20 @@ import { Toolbar } from "./toolbar/Toolbar";
 import { Editor } from "./editor/Editor";
 
 import "./style/editor.scss";
+import "./style/toolbar.scss";
+
+import { CustomerConfiguration } from "./models";
+import { createElement } from "./utils";
 
 export class DEditor {
   private container: HTMLElement;
-  private el: HTMLDivElement;
-  constructor(container: string | HTMLElement) {
+  private root: HTMLDivElement;
+  private customerConfig: CustomerConfiguration;
+
+  constructor(
+    container: string | HTMLElement,
+    customerConfig: CustomerConfiguration = {}
+  ) {
     if (typeof container === "string") {
       if (!document.querySelector(container)) {
         throw new Error("fuck");
@@ -15,11 +24,21 @@ export class DEditor {
     } else {
       this.container = container;
     }
+    if (customerConfig) {
+      this.customerConfig = customerConfig;
+    }
 
-    const div = document.createElement("div");
-    new Toolbar(div);
-    new Editor(div);
+    const div = createElement("div", {
+      className: "de-editor-container"
+    }) as HTMLDivElement;
 
-    this.el = this.container.appendChild(div);
+    const editor = Editor.createEditor(div, customerConfig);
+
+    const toolbar = Toolbar.createToolbar(div,editor);
+
+    div.appendChild(toolbar.el);
+    div.appendChild(editor.el);
+
+    this.root = this.container.appendChild(div);
   }
 }

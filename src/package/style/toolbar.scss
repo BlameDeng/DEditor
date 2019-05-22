@@ -1,0 +1,35 @@
+@mixin toolButton {
+  background-color: transparent;
+  border: 1px solid;
+  border-color: transparent;
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  cursor: pointer;
+  &:hover {
+    border-color: rgba(0, 0, 0, 0.15);
+  }
+  &:focus {
+    outline: none;
+  }
+  &.selected {
+    border-color: rgba(0, 0, 0, 0.15);
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+}
+
+@mixin toolImg {
+  width: 30px;
+  height: 30px;
+  vertical-align: middle;
+}
+
+.de-toolbar-wrapper {
+  .de-toolbar {
+    .bold-button {
+      @include toolButton();
+      .bold-img {
+        @include toolImg();
+      }
+    }
+  }
+}

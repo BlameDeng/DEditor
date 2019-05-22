@@ -1,5 +1,36 @@
-.de-editor {
+.de-editor-wrapper {
   width: 820px;
   margin: 0 auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  .de-title {
+    margin: 0 100px;
+    padding: 90px 0 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    .input {
+      font-size: 30px;
+      font-weight: 700;
+      color: rgba(0, 0, 0, 0.85);
+      border: none;
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+  .de-content {
+    min-height: 1000px;
+    padding: 20px 0 100px;
+    .de-editor {
+      min-height: 800px;
+      &:focus {
+        outline: none;
+      }
+      .de-line {
+        margin: 0 100px;
+        color: rgba(0, 0, 0, 0.65);
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 2em;
+      }
+    }
+  }
 }
