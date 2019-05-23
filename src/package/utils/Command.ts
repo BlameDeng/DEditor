@@ -9,6 +9,7 @@ export class Command {
   };
 
   private constructor(editor: Editor) {
+    document.execCommand("styleWithCSS", false, "true");
     this.editor = editor;
   }
 

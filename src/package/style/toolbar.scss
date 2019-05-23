@@ -2,32 +2,37 @@
   background-color: transparent;
   border: 1px solid;
   border-color: transparent;
-  border-radius: 2px;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
   cursor: pointer;
   &:hover {
-    border-color: rgba(0, 0, 0, 0.15);
+    border-color: rgba(0, 0, 0, 0.1);
   }
   &:focus {
     outline: none;
   }
   &.selected {
-    border-color: rgba(0, 0, 0, 0.15);
+    border-color: rgba(0, 0, 0, 0.1);
     background-color: rgba(0, 0, 0, 0.05);
   }
 }
 
 @mixin toolImg {
-  width: 30px;
-  height: 30px;
+  width: 26px;
+  height: 26px;
   vertical-align: middle;
 }
 
 .de-toolbar-wrapper {
   .de-toolbar {
-    .bold-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0 8px;
+    .bold-button,
+    .italic-button {
       @include toolButton();
-      .bold-img {
+      .bold-img,
+      .italic-img {
         @include toolImg();
       }
     }

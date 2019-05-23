@@ -1,31 +1,36 @@
-import { createElement } from "../utils";
+import { createElement, ToolManager } from "../utils";
 import { EditorState, StatePayload, CustomerConfiguration } from "../models";
+import { Tool } from "../tools/Tool";
 
 export class Editor {
+  public static createEditor = (
+    root: HTMLDivElement,
+    customerConfig: CustomerConfiguration,
+    toolManager: ToolManager
+  ): Editor => {
+    const editor = new Editor(root, customerConfig, toolManager);
+    editor.init();
+    return editor;
+  };
+
   public el: HTMLDivElement;
   public focused = false;
 
   private editorEl: HTMLDivElement;
+  private toolManager: ToolManager;
   private root: HTMLDivElement;
   private customerConfig: CustomerConfiguration;
   private state: EditorState;
   private lastRange: Range | null = null;
 
-  public static createEditor = (
-    root: HTMLDivElement,
-    customerConfig: CustomerConfiguration
-  ): Editor => {
-    const editor = new Editor(root, customerConfig);
-    editor.init();
-    return editor;
-  };
-
   private constructor(
     root: HTMLDivElement,
-    customerConfig: CustomerConfiguration
+    customerConfig: CustomerConfiguration,
+    toolManager: ToolManager
   ) {
     this.root = root;
     this.customerConfig = customerConfig;
+    this.toolManager = toolManager;
   }
 
   /**
@@ -87,16 +92,27 @@ export class Editor {
    * 绑定事件
    */
   private bindEvents = (): void => {
+    this.editorEl.addEventListener("click", this.handleClick);
     this.editorEl.addEventListener("keydown", this.handleKeyDown);
     this.editorEl.addEventListener("focus", this.handleFocus);
     this.editorEl.addEventListener("blur", this.handleBlur);
   };
 
   /**
-   * 监听删除键，防止删除第一行
-   * TODO: 兼容
+   * 监听点击，点击 editor 后根据光标位置更新 toolbar 状态
+   */
+  private handleClick = (): void => {
+    this.toolManager.handleEditorClick();
+  };
+
+  /**
+   * 监听按键，防止删除第一行，并调用每个 tool 的 handleKeyDown
+   * @todo 兼容
    */
   private handleKeyDown = (e: KeyboardEvent): void => {
+    this.toolManager.forEach((tool: Tool) => {
+      tool.handleKeyDown(e);
+    });
     if (e.keyCode === 8) {
       if (
         this.editorEl.childNodes.length === 1 &&

@@ -1,0 +1,41 @@
+.de-tooltip-wrapper {
+  position: absolute;
+  z-index: 100;
+  background-color: transparent;
+  transform: translateX(-50%);
+  padding-top: 10px;
+  display: none;
+  &.active {
+    display: block;
+  }
+  .de-tooltip-content {
+    border-radius: 2px;
+    box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.07);
+    position: relative;
+    background-color: #41464b;
+    .de-tooltip-arrow {
+      position: absolute;
+      border: 5px solid #41464b;
+      width: 0;
+      height: 0;
+      background-color: inherit;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%) rotateZ(45deg);
+      box-shadow: -3px -3px 7px rgba(0, 0, 0, 0.07);
+    }
+    .de-tooltip-msg {
+      padding: 5px 12px;
+      text-align: center;
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 16px;
+      .main {
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .sub {
+        color: rgba(255, 255, 255, 0.45);
+      }
+    }
+  }
+}

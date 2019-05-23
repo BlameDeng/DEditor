@@ -3,9 +3,10 @@ import { Editor } from "./editor/Editor";
 
 import "./style/editor.scss";
 import "./style/toolbar.scss";
+import "./style/tooltip.scss";
 
 import { CustomerConfiguration } from "./models";
-import { createElement } from "./utils";
+import { createElement, ToolManager } from "./utils";
 
 export class DEditor {
   private container: HTMLElement;
@@ -32,9 +33,11 @@ export class DEditor {
       className: "de-editor-container"
     }) as HTMLDivElement;
 
-    const editor = Editor.createEditor(div, customerConfig);
+    const toolManager = new ToolManager();
 
-    const toolbar = Toolbar.createToolbar(div,editor);
+    const editor = Editor.createEditor(div, customerConfig, toolManager);
+
+    const toolbar = Toolbar.createToolbar(div, editor, toolManager);
 
     div.appendChild(toolbar.el);
     div.appendChild(editor.el);

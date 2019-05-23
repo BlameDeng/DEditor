@@ -1,25 +1,36 @@
-import { createElement, Command } from "../utils";
+import { createElement, Command, ToolManager } from "../utils";
 import { Bold } from "../tools/Bold";
 import { Editor } from "../editor/Editor";
+import { timingSafeEqual } from "crypto";
+import { FontColor } from "../tools/FontColor";
+import { Italic } from "../tools/Italic";
 
 export class Toolbar {
-  public el: HTMLDivElement;
-  private root: HTMLDivElement;
-  private editor: Editor;
-  private command: Command;
-
   public static createToolbar = (
     root: HTMLDivElement,
-    editor: Editor
+    editor: Editor,
+    toolManager: ToolManager
   ): Toolbar => {
-    const toolbar = new Toolbar(root, editor);
+    const toolbar = new Toolbar(root, editor, toolManager);
     toolbar.init();
     return toolbar;
   };
 
-  private constructor(root: HTMLDivElement, editor: Editor) {
+  public el: HTMLDivElement;
+
+  private root: HTMLDivElement;
+  private editor: Editor;
+  private command: Command;
+  private toolManager: ToolManager;
+
+  private constructor(
+    root: HTMLDivElement,
+    editor: Editor,
+    toolManager: ToolManager
+  ) {
     this.root = root;
     this.editor = editor;
+    this.toolManager = toolManager;
     this.command = Command.createCommand(this.editor);
   }
 
@@ -42,7 +53,13 @@ export class Toolbar {
       className: "de-toolbar"
     }) as HTMLDivElement;
 
-    Bold.createBold(toolbarEl, this.command);
+    const bold = Bold.createBold(toolbarEl, this.command);
+    const italic = Italic.createItalic(toolbarEl, this.command);
+    // const fontColor = FontColor.createFontColor(toolbarEl, this.command);
+
+    this.toolManager.register("bold", bold);
+    this.toolManager.register("italic", italic);
+    // this.toolManager.register("fontColor", fontColor);
 
     wrapper.appendChild(toolbarEl);
   };

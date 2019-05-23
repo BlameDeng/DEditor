@@ -2,14 +2,14 @@ import { Tool } from "./Tool";
 import { createElement, Command } from "../utils";
 import { Tooltip } from "../components/Tooltip";
 
-export class Bold extends Tool {
-  public static createBold = (
+export class Italic extends Tool {
+  public static createItalic = (
     toolbarEl: HTMLDivElement,
     command: Command
-  ): Bold => {
-    const bold = new Bold(toolbarEl, command);
-    bold.init();
-    return bold;
+  ): Italic => {
+    const italic = new Italic(toolbarEl, command);
+    italic.init();
+    return italic;
   };
 
   public el: HTMLButtonElement;
@@ -28,7 +28,7 @@ export class Bold extends Tool {
     this.bindEvents();
     Tooltip.createTooltip(
       this.el,
-      "<span class='main'>粗体</span><br /><span class='sub'>Ctrl+B</span>"
+      "<span class='main'>斜体</span><br /><span class='sub'>Ctrl+I</span>"
     );
   };
 
@@ -49,8 +49,8 @@ export class Bold extends Tool {
    * @param e
    */
   public handleKeyDown = (e: KeyboardEvent): void => {
-    if (e.ctrlKey && e.keyCode === 66) {
-      // Ctrl+B
+    if (e.ctrlKey && e.keyCode === 73) {
+      // Ctrl+I
       this.setSelected(!this.selected);
     }
   };
@@ -61,14 +61,14 @@ export class Bold extends Tool {
   private initDOM = (): void => {
     const button = createElement(
       "button",
-      { type: "button", className: "bold-button" },
+      { type: "button", className: "italic-button" },
       [
         {
           tagName: "img",
           options: {
-            src: require("../svg/bold.svg"),
-            alt: "bold",
-            className: "bold-img"
+            src: require("../svg/italic.svg"),
+            alt: "italic",
+            className: "italic-img"
           }
         }
       ]
@@ -81,12 +81,11 @@ export class Bold extends Tool {
    */
   private bindEvents = (): void => {
     this.el.addEventListener("click", this.handleClick);
-    this.el.addEventListener("keydown", this.handleKeyDown);
   };
 
   private handleClick = (): void => {
     this.setSelected(!this.selected);
-    this.command.exec("bold");
+    this.command.exec("italic");
   };
 
   private activate = () => {
