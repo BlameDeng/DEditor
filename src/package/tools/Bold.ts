@@ -14,7 +14,7 @@ export class Bold extends Tool {
 
   public el: HTMLButtonElement;
 
-  private selected = false;
+  private active = false;
 
   private constructor(toolbarEl: HTMLDivElement, command: Command) {
     super(toolbarEl, command);
@@ -33,26 +33,23 @@ export class Bold extends Tool {
   };
 
   /**
-   * 设置 selected，只设置 selected，不执行 command 命令
-   * @param selected
+   * 重写 checkActive
    */
-  public setSelected = (selected: boolean): void => {
-    if (selected) {
+  public checkActive = (): void => {
+    this.setActive(this.command.queryState("bold"));
+  };
+
+  /**
+   * 设置 active，只设置 active，不执行 command 命令
+   * @param active
+   */
+  public setActive = (active: boolean): void => {
+    if (active) {
       this.activate();
     } else {
       this.deactivate();
     }
-  };
-
-  /**
-   * 重写 handleKeyDown
-   * @param e
-   */
-  public handleKeyDown = (e: KeyboardEvent): void => {
-    if (e.ctrlKey && e.keyCode === 66) {
-      // Ctrl+B
-      this.setSelected(!this.selected);
-    }
+    this.active = active;
   };
 
   /**
@@ -81,21 +78,18 @@ export class Bold extends Tool {
    */
   private bindEvents = (): void => {
     this.el.addEventListener("click", this.handleClick);
-    this.el.addEventListener("keydown", this.handleKeyDown);
   };
 
   private handleClick = (): void => {
-    this.setSelected(!this.selected);
+    // this.setSelected(!this.selected);
     this.command.exec("bold");
   };
 
   private activate = () => {
-    this.el.classList.add("selected");
-    this.selected = true;
+    this.el.classList.add("active");
   };
 
   private deactivate = () => {
-    this.el.classList.remove("selected");
-    this.selected = false;
+    this.el.classList.remove("active");
   };
 }

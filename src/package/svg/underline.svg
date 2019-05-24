@@ -1,0 +1,15 @@
+<svg version="1.1" id="underline" 
+    xmlns="http://www.w3.org/2000/svg" 
+    xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 30 27" style="enable-background:new 0 0 30 27" xml:space="preserve">
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1">
+        <g id="U-1x">
+            <g id="btn-underline" transform="translate(9.500000, 8.000000)">
+                <path id="Combined-Shape" d="M2.881,0v6.021c0,0.707,0.137,1.295,0.41,1.764
+				C3.697,8.492,4.38,8.846,5.342,8.846c1.153,0,1.937-0.382,2.352-1.147c0.223-0.416,0.335-0.975,0.335-1.678V0h1.381v5.471
+				c0,1.198-0.166,2.12-0.499,2.765C8.299,9.412,7.146,10,5.451,10S2.605,9.412,1.999,8.236C1.666,7.591,1.5,6.669,1.5,5.471V0
+				H2.881z M0,12h11v1H0V12z"></path>
+            </g>
+        </g>
+    </g>
+</svg>

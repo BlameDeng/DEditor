@@ -10,7 +10,7 @@
   &:focus {
     outline: none;
   }
-  &.selected {
+  &.active {
     border-color: rgba(0, 0, 0, 0.1);
     background-color: rgba(0, 0, 0, 0.05);
   }
@@ -29,10 +29,14 @@
     align-items: center;
     padding: 12px 0 8px;
     .bold-button,
-    .italic-button {
+    .italic-button,
+    .underline-button,
+    .strikethrough-button {
       @include toolButton();
       .bold-img,
-      .italic-img {
+      .italic-img,
+      .underline-img,
+      .strikethrough-img {
         @include toolImg();
       }
     }

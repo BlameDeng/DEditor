@@ -1,14 +1,8 @@
-import { createElement, ToolManager } from "../utils";
-import { EditorState, StatePayload, CustomerConfiguration } from "../models";
-import { Tool } from "../tools/Tool";
+import { createElement, EventHub } from "../utils";
 
 export class Editor {
-  public static createEditor = (
-    root: HTMLDivElement,
-    customerConfig: CustomerConfiguration,
-    toolManager: ToolManager
-  ): Editor => {
-    const editor = new Editor(root, customerConfig, toolManager);
+  public static createEditor = (eventHub: EventHub): Editor => {
+    const editor = new Editor(eventHub);
     editor.init();
     return editor;
   };
@@ -17,20 +11,11 @@ export class Editor {
   public focused = false;
 
   private editorEl: HTMLDivElement;
-  private toolManager: ToolManager;
-  private root: HTMLDivElement;
-  private customerConfig: CustomerConfiguration;
-  private state: EditorState;
   private lastRange: Range | null = null;
+  private eventHub: EventHub;
 
-  private constructor(
-    root: HTMLDivElement,
-    customerConfig: CustomerConfiguration,
-    toolManager: ToolManager
-  ) {
-    this.root = root;
-    this.customerConfig = customerConfig;
-    this.toolManager = toolManager;
+  private constructor(eventHub: EventHub) {
+    this.eventHub = eventHub;
   }
 
   /**
@@ -99,21 +84,19 @@ export class Editor {
   };
 
   /**
-   * 监听点击，点击 editor 后根据光标位置更新 toolbar 状态
+   * 监听点击，点击后触发 "editor-click" 事件（toolbar 订阅）
    */
   private handleClick = (): void => {
-    this.toolManager.handleEditorClick();
+    this.eventHub.emit("editor-click");
   };
 
   /**
-   * 监听按键，防止删除第一行，并调用每个 tool 的 handleKeyDown
+   * 监听键盘事件，防止删除第一行，并触发 "editor-keydown" 事件（toolbar 订阅）
    * @todo 兼容
    */
   private handleKeyDown = (e: KeyboardEvent): void => {
-    this.toolManager.forEach((tool: Tool) => {
-      tool.handleKeyDown(e);
-    });
     if (e.keyCode === 8) {
+      // 删除键
       if (
         this.editorEl.childNodes.length === 1 &&
         this.editorEl.textContent!.length === 0
@@ -121,6 +104,7 @@ export class Editor {
         e.preventDefault();
       }
     }
+    this.eventHub.emit("editor-keydown", e);
   };
 
   /**

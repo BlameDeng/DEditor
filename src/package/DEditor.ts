@@ -6,7 +6,7 @@ import "./style/toolbar.scss";
 import "./style/tooltip.scss";
 
 import { CustomerConfiguration } from "./models";
-import { createElement, ToolManager } from "./utils";
+import { createElement, ToolManager, EventHub, Command } from "./utils";
 
 export class DEditor {
   private container: HTMLElement;
@@ -33,11 +33,20 @@ export class DEditor {
       className: "de-editor-container"
     }) as HTMLDivElement;
 
+    // 实例化事件中心
+    const eventHub = new EventHub();
+
+    // 实例化编辑器
+    const editor = Editor.createEditor(eventHub);
+
+    // 实例化工具管理类
     const toolManager = new ToolManager();
 
-    const editor = Editor.createEditor(div, customerConfig, toolManager);
+    // 实例化命令类
+    const command = new Command(editor, toolManager);
 
-    const toolbar = Toolbar.createToolbar(div, editor, toolManager);
+    // 实例化工具条
+    const toolbar = Toolbar.createToolbar(toolManager, eventHub, command);
 
     div.appendChild(toolbar.el);
     div.appendChild(editor.el);

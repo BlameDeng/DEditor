@@ -1,16 +1,14 @@
 import { Editor } from "../editor/Editor";
+import { ToolManager } from ".";
 
 export class Command {
   private editor: Editor;
+  private toolManager: ToolManager;
 
-  public static createCommand = (editor: Editor): Command => {
-    const command = new Command(editor);
-    return command;
-  };
-
-  private constructor(editor: Editor) {
-    document.execCommand("styleWithCSS", false, "true");
+  constructor(editor: Editor, toolManager: ToolManager) {
+    // document.execCommand("styleWithCSS", false, "true");
     this.editor = editor;
+    this.toolManager = toolManager;
   }
 
   /**
@@ -21,5 +19,15 @@ export class Command {
       this.editor.focus();
     }
     document.execCommand(commandId, false, value);
+
+    // 执行命令后，各个 tool 检查显示状态
+    this.toolManager.forEach(tool => tool && tool.checkActive());
+  };
+
+  /**
+   * 封装 document.queryCommandState()
+   */
+  public queryState = (commandId: string): boolean => {
+    return document.queryCommandState(commandId);
   };
 }

@@ -2,14 +2,14 @@ import { Tool } from "./Tool";
 import { createElement, Command } from "../utils";
 import { Tooltip } from "../components/Tooltip";
 
-export class Italic extends Tool {
-  public static createItalic = (
+export class Underline extends Tool {
+  public static createUnderline = (
     toolbarEl: HTMLDivElement,
     command: Command
-  ): Italic => {
-    const italic = new Italic(toolbarEl, command);
-    italic.init();
-    return italic;
+  ): Underline => {
+    const underline = new Underline(toolbarEl, command);
+    underline.init();
+    return underline;
   };
 
   public el: HTMLButtonElement;
@@ -28,7 +28,7 @@ export class Italic extends Tool {
     this.bindEvents();
     Tooltip.createTooltip(
       this.el,
-      "<span class='main'>斜体</span><br /><span class='sub'>Ctrl+I</span>"
+      "<span class='main'>下划线</span><br /><span class='sub'>Ctrl+U</span>"
     );
   };
 
@@ -36,7 +36,7 @@ export class Italic extends Tool {
    * 重写 checkActive
    */
   public checkActive = (): void => {
-    this.setActive(this.command.queryState("italic"));
+    this.setActive(this.command.queryState("underline"));
   };
 
   /**
@@ -58,14 +58,14 @@ export class Italic extends Tool {
   private initDOM = (): void => {
     const button = createElement(
       "button",
-      { type: "button", className: "italic-button" },
+      { type: "button", className: "underline-button" },
       [
         {
           tagName: "img",
           options: {
-            src: require("../svg/italic.svg"),
-            alt: "italic",
-            className: "italic-img"
+            src: require("../svg/underline.svg"),
+            alt: "underline",
+            className: "underline-img"
           }
         }
       ]
@@ -81,8 +81,8 @@ export class Italic extends Tool {
   };
 
   private handleClick = (): void => {
-    // this.setActive(!this.selected);
-    this.command.exec("italic");
+    // this.setSelected(!this.selected);
+    this.command.exec("underline");
   };
 
   private activate = () => {

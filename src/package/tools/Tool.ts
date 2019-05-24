@@ -1,13 +1,17 @@
 import { Command } from "../utils";
 
-export class Tool {
-  public command: Command;
-  public toolbarEl: HTMLDivElement;
+export abstract class Tool {
+  protected toolbarEl: HTMLDivElement;
+  protected command: Command;
 
   constructor(toolbarEl: HTMLDivElement, command: Command) {
     this.toolbarEl = toolbarEl;
     this.command = command;
   }
 
-  public handleKeyDown = (e: KeyboardEvent): void => {};
+  /**
+   * 检查自身显示状态
+   * 子类根据自身需要重写这个方法
+   */
+  public checkActive = (): void => {};
 }
