@@ -85,11 +85,11 @@ export class Bold extends Tool {
     this.command.exec("bold");
   };
 
-  private activate = () => {
+  private activate = (): void => {
     this.el.classList.add("active");
   };
 
-  private deactivate = () => {
+  private deactivate = (): void => {
     this.el.classList.remove("active");
   };
 }

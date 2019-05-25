@@ -4,9 +4,16 @@ import { Editor } from "./editor/Editor";
 import "./style/editor.scss";
 import "./style/toolbar.scss";
 import "./style/tooltip.scss";
+import "./style/dropDown.scss";
 
 import { CustomerConfiguration } from "./models";
-import { createElement, ToolManager, EventHub, Command } from "./utils";
+import {
+  createElement,
+  ToolManager,
+  EventHub,
+  Command,
+  SelectionTool
+} from "./utils";
 
 export class DEditor {
   private container: HTMLElement;
@@ -36,17 +43,25 @@ export class DEditor {
     // 实例化事件中心
     const eventHub = new EventHub();
 
-    // 实例化编辑器
-    const editor = Editor.createEditor(eventHub);
+    // 实例化 selection 工具
+    const selectionTool = new SelectionTool();
 
     // 实例化工具管理类
     const toolManager = new ToolManager();
 
+    // 实例化编辑器
+    const editor = Editor.createEditor(eventHub, selectionTool);
+
     // 实例化命令类
-    const command = new Command(editor, toolManager);
+    const command = new Command(selectionTool, toolManager, editor);
 
     // 实例化工具条
-    const toolbar = Toolbar.createToolbar(toolManager, eventHub, command);
+    const toolbar = Toolbar.createToolbar(
+      eventHub,
+      selectionTool,
+      toolManager,
+      command
+    );
 
     div.appendChild(toolbar.el);
     div.appendChild(editor.el);

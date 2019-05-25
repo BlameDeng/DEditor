@@ -1,7 +1,7 @@
 import { Tool } from "../tools/Tool";
 
 /**
- * 管理 tool 的类，用于 editor 聚焦时根据光标位置的 node 判断每个 tool 的显示状态等
+ * 管理 tool 的类
  */
 export class ToolManager {
   private tools: Map<string, Tool> = new Map();

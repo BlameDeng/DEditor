@@ -5,7 +5,7 @@
   "author": "blame <476961779@qq.com>",
   "license": "MIT",
   "scripts": {
-    "start": "npx webpack-dev-server --port=4000"
+    "start": "npx webpack-dev-server --config webpack.dev.config.js --port=4000"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",

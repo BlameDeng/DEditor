@@ -1,14 +1,20 @@
 import { Editor } from "../editor/Editor";
-import { ToolManager } from ".";
+import { ToolManager, SelectionTool } from ".";
 
 export class Command {
-  private editor: Editor;
+  private selectionTool: SelectionTool;
   private toolManager: ToolManager;
+  private editor: Editor;
 
-  constructor(editor: Editor, toolManager: ToolManager) {
+  constructor(
+    selectionTool: SelectionTool,
+    toolManager: ToolManager,
+    editor: Editor
+  ) {
     // document.execCommand("styleWithCSS", false, "true");
-    this.editor = editor;
+    this.selectionTool = selectionTool;
     this.toolManager = toolManager;
+    this.editor = editor;
   }
 
   /**
@@ -18,7 +24,13 @@ export class Command {
     if (!this.editor.focused) {
       this.editor.focus();
     }
+
     document.execCommand(commandId, false, value);
+
+    // 执行 "undo"、"redo" 命令后光标位置定位到末尾
+    if (commandId === "undo" || commandId === "redo") {
+      this.selectionTool.setRangeToEnd();
+    }
 
     // 执行命令后，各个 tool 检查显示状态
     this.toolManager.forEach(tool => tool && tool.checkActive());
@@ -29,5 +41,12 @@ export class Command {
    */
   public queryState = (commandId: string): boolean => {
     return document.queryCommandState(commandId);
+  };
+
+  /**
+   * 封装 document.queryCommandValue()
+   */
+  public queryValue = (commandId: string): string => {
+    return document.queryCommandValue(commandId);
   };
 }

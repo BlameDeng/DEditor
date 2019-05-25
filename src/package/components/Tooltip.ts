@@ -1,39 +1,43 @@
 import { createElement } from "../utils";
 
 export class Tooltip {
-  private triggerNode: HTMLElement;
-  private msg: string;
-  private el: HTMLDivElement;
-
   public static createTooltip = (
     triggerNode: HTMLElement,
-    msg: string
+    msg: string | HTMLElement
   ): Tooltip => {
     const tooltip = new Tooltip(triggerNode, msg);
     tooltip.init();
     return tooltip;
   };
 
-  private constructor(triggerNode: HTMLElement, msg: string) {
+  private triggerNode: HTMLElement;
+  private msg: string | HTMLElement;
+  private el: HTMLDivElement;
+
+  private constructor(triggerNode: HTMLElement, msg: string | HTMLElement) {
     this.triggerNode = triggerNode;
     this.msg = msg;
   }
 
   public init = (): void => {
-    this.initDOM();
     this.bindEvents();
   };
 
-  private initDOM = (): void => {};
+  /**
+   * 暴露出关闭 tooltip 的方法
+   */
+  public hidden = () => {
+    if (this.el) {
+      this.el.classList.remove("active");
+    }
+  };
 
   /**
    * 渲染 tooltip
    */
   private renderTooltip = (): void => {
-    const div = createElement(
-      "div",
-      { className: "de-tooltip-wrapper active" },
-      [
+    const div = <HTMLDivElement>(
+      createElement("div", { className: "de-tooltip-wrapper active" }, [
         {
           tagName: "div",
           options: { className: "de-tooltip-content" },
@@ -42,9 +46,14 @@ export class Tooltip {
             { tagName: "div", options: { className: "de-tooltip-msg" } }
           ]
         }
-      ]
-    ) as HTMLDivElement;
-    div.querySelector(".de-tooltip-msg")!.innerHTML = this.msg;
+      ])
+    );
+    const msgContainer = div.querySelector(".de-tooltip-msg")!;
+    if (typeof this.msg === "string") {
+      msgContainer.innerHTML = this.msg;
+    } else {
+      msgContainer.appendChild(this.msg);
+    }
     this.el = document.body.appendChild(div);
   };
 
@@ -52,14 +61,8 @@ export class Tooltip {
    * 定位 tooltip
    */
   private locateTooltip = () => {
-    const {
-      top,
-      left,
-      right,
-      bottom
-    } = this.triggerNode.getBoundingClientRect();
+    const { left, right, bottom } = this.triggerNode.getBoundingClientRect();
     const width = right - left;
-    const height = bottom - top;
     const { scrollX, scrollY } = window;
     this.el.style.left = left + scrollX + width / 2 + "px";
     this.el.style.top = bottom + scrollY + "px";

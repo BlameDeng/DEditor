@@ -1,39 +1,55 @@
-import { createElement, Command, ToolManager, EventHub } from "../utils";
+import {
+  createElement,
+  Command,
+  ToolManager,
+  EventHub,
+  SelectionTool
+} from "../utils";
 import { Bold } from "../tools/Bold";
 import { Italic } from "../tools/Italic";
 import { Underline } from "../tools/Underline";
-import { StrikeThrough } from "../tools/Strikethrough";
+import { StrikeThrough } from "../tools/StrikeThrough";
+import { Undo } from "../tools/Undo";
+import { Redo } from "../tools/Redo";
+import { RemoveFormat } from "../tools/RemoveFormat";
+import { FontSize } from "../tools/FontSize";
+import { FontColor } from "../tools/FontColor";
 
 export class Toolbar {
   public static createToolbar = (
-    toolManager: ToolManager,
     eventHub: EventHub,
+    selectionTool: SelectionTool,
+    toolManager: ToolManager,
     command: Command
   ): Toolbar => {
-    const toolbar = new Toolbar(toolManager, eventHub, command);
+    const toolbar = new Toolbar(eventHub, selectionTool, toolManager, command);
     toolbar.init();
     return toolbar;
   };
 
   public el: HTMLDivElement;
 
-  private command: Command;
-  private toolManager: ToolManager;
   private eventHub: EventHub;
+  private selectionTool: SelectionTool;
+  private toolManager: ToolManager;
+  private command: Command;
 
   private constructor(
-    toolManager: ToolManager,
     eventHub: EventHub,
+    selectionTool: SelectionTool,
+    toolManager: ToolManager,
     command: Command
   ) {
-    this.toolManager = toolManager;
     this.eventHub = eventHub;
+    this.selectionTool = selectionTool;
+    this.toolManager = toolManager;
+    this.command = command;
+
     this.eventHub.subscribe(
       "editor-keydown",
       this.handleKeyDownEventFromEditor
     );
     this.eventHub.subscribe("editor-click", this.handleClickEventFromEditor);
-    this.command = command;
   }
 
   /**
@@ -51,10 +67,17 @@ export class Toolbar {
     const wrapper = createElement("div", { className: "de-toolbar-wrapper" });
     this.el = fragment.appendChild(wrapper) as HTMLDivElement;
 
-    const toolbarEl = createElement("div", {
+    const toolbarEl = <HTMLDivElement>createElement("div", {
       className: "de-toolbar"
-    }) as HTMLDivElement;
+    });
 
+    const undo = Undo.createUndo(toolbarEl, this.command);
+    const redo = Redo.createRedo(toolbarEl, this.command);
+    const removeFormat = RemoveFormat.createRemoveFormat(
+      toolbarEl,
+      this.command
+    );
+    const fontSize = FontSize.createFontSize(toolbarEl, this.command);
     const bold = Bold.createBold(toolbarEl, this.command);
     const italic = Italic.createItalic(toolbarEl, this.command);
     const underline = Underline.createUnderline(toolbarEl, this.command);
@@ -62,13 +85,17 @@ export class Toolbar {
       toolbarEl,
       this.command
     );
-    // const fontColor = FontColor.createFontColor(toolbarEl, this.command);
+    const fontColor = FontColor.createFontColor(toolbarEl, this.command);
 
+    this.toolManager.register("undo", undo);
+    this.toolManager.register("redo", redo);
+    this.toolManager.register("removeFormat", removeFormat);
+    this.toolManager.register("fontSize", fontSize);
     this.toolManager.register("bold", bold);
     this.toolManager.register("italic", italic);
     this.toolManager.register("underline", underline);
     this.toolManager.register("strikeThrough", strikeThrough);
-    // this.toolManager.register("fontColor", fontColor);
+    this.toolManager.register("fontColor", fontColor);
 
     wrapper.appendChild(toolbarEl);
   };
@@ -82,10 +109,9 @@ export class Toolbar {
       // Ctrl+Shift+S 需要自己执行 command
       this.command.exec("strikeThrough");
     }
-
     if (this.shouldCheckActive(e)) {
       // 延迟，等待快捷键生效
-      setTimeout(() => {
+      requestAnimationFrame(() => {
         this.toolManager.forEach(tool => tool && tool.checkActive());
       });
     }
@@ -104,6 +130,13 @@ export class Toolbar {
     }
     if (e.ctrlKey && e.shiftKey && e.keyCode === 83) {
       // Ctrl+Shift+S
+      return true;
+    }
+    if (e.ctrlKey && (e.keyCode === 90 || e.keyCode === 89)) {
+      // Ctrl+Z Ctrl+Y "undo" "redo"
+      requestAnimationFrame(() => {
+        this.selectionTool.setRangeToEnd();
+      });
       return true;
     }
     return false;

@@ -5,3 +5,5 @@ export { Command } from "./Command";
 export { ToolManager } from "./ToolManager";
 
 export { EventHub } from "./EventHub";
+
+export { SelectionTool } from "./SelectionTool";

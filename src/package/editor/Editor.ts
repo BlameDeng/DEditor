@@ -1,8 +1,11 @@
-import { createElement, EventHub } from "../utils";
+import { createElement, EventHub, SelectionTool } from "../utils";
 
 export class Editor {
-  public static createEditor = (eventHub: EventHub): Editor => {
-    const editor = new Editor(eventHub);
+  public static createEditor = (
+    eventHub: EventHub,
+    selectionTool: SelectionTool
+  ): Editor => {
+    const editor = new Editor(eventHub, selectionTool);
     editor.init();
     return editor;
   };
@@ -11,11 +14,12 @@ export class Editor {
   public focused = false;
 
   private editorEl: HTMLDivElement;
-  private lastRange: Range | null = null;
   private eventHub: EventHub;
+  private selectionTool: SelectionTool;
 
-  private constructor(eventHub: EventHub) {
+  private constructor(eventHub: EventHub, selectionTool: SelectionTool) {
     this.eventHub = eventHub;
+    this.selectionTool = selectionTool;
   }
 
   /**
@@ -31,7 +35,7 @@ export class Editor {
    */
   public focus = (): void => {
     this.editorEl.focus();
-    this.addLastRange();
+    this.selectionTool.restoreLastRange();
     this.focused = true;
   };
 
@@ -118,29 +122,7 @@ export class Editor {
    * 监听失焦，失焦时保存当前光标位置
    */
   private handleBlur = (): void => {
-    this.saveLastRange();
+    this.selectionTool.saveLastRange();
     this.focused = false;
-  };
-
-  /**
-   * 保存当前光标位置
-   */
-  private saveLastRange = (): void => {
-    const selection = window.getSelection();
-    if (selection && selection.rangeCount) {
-      this.lastRange = selection.getRangeAt(0);
-    }
-  };
-
-  /**
-   * 恢复光标位置，恢复后清除保存的光标位置
-   */
-  private addLastRange = (): void => {
-    const selection = window.getSelection();
-    if (this.lastRange && selection) {
-      selection.removeAllRanges();
-      selection.addRange(this.lastRange);
-      this.lastRange = null;
-    }
   };
 }

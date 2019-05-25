@@ -85,12 +85,12 @@ export class StrikeThrough extends Tool {
     this.command.exec("strikeThrough");
   };
 
-  private activate = () => {
+  private activate = (): void => {
     this.el.classList.add("active");
     this.active = true;
   };
 
-  private deactivate = () => {
+  private deactivate = (): void => {
     this.el.classList.remove("active");
     this.active = false;
   };

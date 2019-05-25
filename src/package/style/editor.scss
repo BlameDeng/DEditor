@@ -26,10 +26,22 @@
       }
       .de-line {
         margin: 0 100px;
-        color: rgba(0, 0, 0, 0.65);
+        color: #494949;
         font-size: 14px;
         font-weight: normal;
         line-height: 2em;
+        &::selection {
+          background-color: #d8ebff;
+        }
+        b,
+        i,
+        u,
+        strike,
+        font {
+          &::selection {
+            background-color: #d8ebff;
+          }
+        }
       }
     }
   }

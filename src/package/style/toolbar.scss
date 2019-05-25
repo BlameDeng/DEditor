@@ -1,4 +1,5 @@
 @mixin toolButton {
+  height: 26px;
   background-color: transparent;
   border: 1px solid;
   border-color: transparent;
@@ -27,18 +28,143 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 12px 0 8px;
+    padding: 12px 0 10px;
+    .undo-button,
+    .redo-button,
+    .removeformat-button,
+    .fontsize-button,
     .bold-button,
     .italic-button,
     .underline-button,
-    .strikethrough-button {
+    .strikethrough-button,
+    .fontcolor-button {
       @include toolButton();
+      .fontsize {
+        display: inline-flex;
+        justify-content: flex-start;
+        align-items: center;
+        height: 26px;
+        padding: 0 4px;
+        .fontsize-value {
+          font-size: 12px;
+          color: rgba(0, 0, 0, 0.65);
+          font-weight: 600;
+        }
+        .triangle-img {
+          margin-left: 4px;
+          width: 8px;
+          height: 8px;
+          vertical-align: middle;
+        }
+      }
+      .fontcolor-span {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        .fontcolor-value {
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+          }
+          // .fontcolor-img {
+          //   width: 20px;
+          //   height: 20px;
+          //   vertical-align: middle;
+          // }
+          svg {
+            width: 22px;
+            height: 22px;
+          }
+        }
+        .fontcolor-trigger {
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+          padding: 0 2px 0 1px;
+          &:hover {
+            background-color: rgba(0, 0, 0, 0.03);
+          }
+          .triangle-img {
+            width: 8px;
+            height: 8px;
+            vertical-align: middle;
+          }
+        }
+      }
+      .undo-img,
+      .redo-img,
+      .removeformat-img,
       .bold-img,
       .italic-img,
       .underline-img,
       .strikethrough-img {
         @include toolImg();
       }
+    }
+  }
+}
+
+.de-fontsize-picker {
+  list-style: none;
+  padding-top: 4px;
+  .de-fontsize-picker-item {
+    width: 100px;
+    padding: 4px 12px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+    line-height: 1.2em;
+    user-select: none;
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.03);
+    }
+    &.active {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+    &.font-10 {
+      font-size: 10px;
+    }
+    &.font-13 {
+      font-size: 13px;
+    }
+    &.font-16 {
+      font-size: 16px;
+    }
+    &.font-18 {
+      font-size: 18px;
+    }
+    &.font-24 {
+      font-size: 24px;
+    }
+    &.font-32 {
+      font-size: 32px;
+    }
+    &.font-48 {
+      font-size: 48px;
+    }
+  }
+}
+
+.de-fontcolor-picker {
+  list-style: none;
+  margin: 10px;
+  width: 180px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  .de-fontcolor-picker-item {
+    width: 16px;
+    height: 16px;
+    margin: 2px;
+    cursor: pointer;
+    &:hover {
+      box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.25);
     }
   }
 }
