@@ -40,6 +40,14 @@ export class Editor {
   };
 
   /**
+   * 添加一行到末尾，用于插入元素（列表等）后另起一行
+   */
+  public appendNewLine = (): void => {
+    const p = createElement("p", { className: "de-line" }, [{ tagName: "br" }]);
+    this.editorEl.appendChild(p);
+  };
+
+  /**
    * 初始化渲染 DOM
    */
   private initDOM = (): void => {

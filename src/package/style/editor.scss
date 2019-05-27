@@ -33,11 +33,14 @@
         &::selection {
           background-color: #d8ebff;
         }
+        li{margin-left: 26px;}
         b,
         i,
         u,
         strike,
-        font {
+        font,
+        span,
+        li {
           &::selection {
             background-color: #d8ebff;
           }

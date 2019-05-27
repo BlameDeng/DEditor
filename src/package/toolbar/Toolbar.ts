@@ -14,6 +14,9 @@ import { Redo } from "../tools/Redo";
 import { RemoveFormat } from "../tools/RemoveFormat";
 import { FontSize } from "../tools/FontSize";
 import { FontColor } from "../tools/FontColor";
+import { BackColor } from "../tools/BackColor";
+import { OrderedList } from "../tools/OrderedList";
+import { UnorderedList } from "../tools/UnorderedList";
 
 export class Toolbar {
   public static createToolbar = (
@@ -86,6 +89,12 @@ export class Toolbar {
       this.command
     );
     const fontColor = FontColor.createFontColor(toolbarEl, this.command);
+    const backColor = BackColor.createBackColor(toolbarEl, this.command);
+    const orderedList = OrderedList.createOrderedList(toolbarEl, this.command);
+    const unorderedList = UnorderedList.createUnorderedList(
+      toolbarEl,
+      this.command
+    );
 
     this.toolManager.register("undo", undo);
     this.toolManager.register("redo", redo);
@@ -96,6 +105,9 @@ export class Toolbar {
     this.toolManager.register("underline", underline);
     this.toolManager.register("strikeThrough", strikeThrough);
     this.toolManager.register("fontColor", fontColor);
+    this.toolManager.register("backColor", backColor);
+    this.toolManager.register("orderedList", orderedList);
+    this.toolManager.register("unorderList", unorderedList);
 
     wrapper.appendChild(toolbarEl);
   };

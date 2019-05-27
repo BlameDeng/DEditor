@@ -11,7 +11,7 @@ export class Command {
     toolManager: ToolManager,
     editor: Editor
   ) {
-    // document.execCommand("styleWithCSS", false, "true");
+    document.execCommand("styleWithCSS", false, "true");
     this.selectionTool = selectionTool;
     this.toolManager = toolManager;
     this.editor = editor;
@@ -25,15 +25,23 @@ export class Command {
       this.editor.focus();
     }
 
-    document.execCommand(commandId, false, value);
+    const done = document.execCommand(commandId, false, value);
+    if (done) {
+      // 执行 "undo"、"redo" 命令后光标位置定位到末尾
+      if (commandId === "undo" || commandId === "redo") {
+        this.selectionTool.setRangeToEnd();
+      }
 
-    // 执行 "undo"、"redo" 命令后光标位置定位到末尾
-    if (commandId === "undo" || commandId === "redo") {
-      this.selectionTool.setRangeToEnd();
+      if (
+        commandId === "insertOrderedList" ||
+        commandId === "insertUnorderedList"
+      ) {
+        this.editor.appendNewLine();
+      }
+
+      // 执行命令后，各个 tool 检查显示状态
+      this.toolManager.forEach(tool => tool && tool.checkActive());
     }
-
-    // 执行命令后，各个 tool 检查显示状态
-    this.toolManager.forEach(tool => tool && tool.checkActive());
   };
 
   /**

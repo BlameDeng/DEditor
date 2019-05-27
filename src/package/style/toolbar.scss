@@ -37,7 +37,10 @@
     .italic-button,
     .underline-button,
     .strikethrough-button,
-    .fontcolor-button {
+    .fontcolor-button,
+    .backcolor-button,
+    .orderedlist-button,
+    .unorderedlist-button {
       @include toolButton();
       .fontsize {
         display: inline-flex;
@@ -57,12 +60,14 @@
           vertical-align: middle;
         }
       }
-      .fontcolor-span {
+      .fontcolor-span,
+      .backcolor-span {
         display: inline-flex;
         justify-content: center;
         align-items: center;
         height: 100%;
-        .fontcolor-value {
+        .fontcolor-value,
+        .backcolor-value {
           display: inline-flex;
           justify-content: center;
           align-items: center;
@@ -70,17 +75,13 @@
           &:hover {
             background-color: rgba(0, 0, 0, 0.03);
           }
-          // .fontcolor-img {
-          //   width: 20px;
-          //   height: 20px;
-          //   vertical-align: middle;
-          // }
           svg {
             width: 22px;
             height: 22px;
           }
         }
-        .fontcolor-trigger {
+        .fontcolor-trigger,
+        .backcolor-trigger {
           display: inline-flex;
           justify-content: center;
           align-items: center;
@@ -102,7 +103,9 @@
       .bold-img,
       .italic-img,
       .underline-img,
-      .strikethrough-img {
+      .strikethrough-img,
+      .orderedlist-img,
+      .unorderedlist-img {
         @include toolImg();
       }
     }
@@ -150,7 +153,8 @@
   }
 }
 
-.de-fontcolor-picker {
+.de-fontcolor-picker,
+.de-backcolor-picker {
   list-style: none;
   margin: 10px;
   width: 180px;
@@ -158,7 +162,8 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  .de-fontcolor-picker-item {
+  .de-fontcolor-picker-item,
+  .de-backcolor-picker-item {
     width: 16px;
     height: 16px;
     margin: 2px;

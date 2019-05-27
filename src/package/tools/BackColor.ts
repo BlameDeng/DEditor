@@ -9,14 +9,14 @@ interface Option {
   rgb?: string;
 }
 
-export class FontColor extends Tool {
-  public static createFontColor = (
+export class BackColor extends Tool {
+  public static createBackColor = (
     toolbarEl: HTMLDivElement,
     command: Command
-  ): FontColor => {
-    const fontColor = new FontColor(toolbarEl, command);
-    fontColor.init();
-    return fontColor;
+  ): BackColor => {
+    const backColor = new BackColor(toolbarEl, command);
+    backColor.init();
+    return backColor;
   };
 
   public el: HTMLButtonElement;
@@ -73,7 +73,7 @@ export class FontColor extends Tool {
   ];
   private content = createElement(
     "ul",
-    { className: "de-fontcolor-picker" },
+    { className: "de-backcolor-picker" },
     this.options.map((option: Option, index: number) => {
       return {
         tagName: "li",
@@ -81,14 +81,14 @@ export class FontColor extends Tool {
           ["data-value"]: option.value,
           ["data-label"]: option.label,
           title: option.label,
-          className: "de-fontcolor-picker-item",
+          className: "de-backcolor-picker-item",
           style: "background:" + option.value
         }
       };
     })
   );
   private msg = createElement("span", {}, [
-    { tagName: "span", options: { className: "main", innerText: "文本颜色" } },
+    { tagName: "span", options: { className: "main", innerText: "文本高亮" } },
     { tagName: "br" },
     { tagName: "span", options: { className: "sub", innerText: "墨" } }
   ]);
@@ -117,7 +117,7 @@ export class FontColor extends Tool {
    * 挂载后检查
    */
   private checkInitActive = () => {
-    const color = this.command.queryValue("foreColor");
+    const color = this.command.queryValue("backColor");
     const option = this.options.find(
       item => item.value === color || item.rgb === color
     );
@@ -132,35 +132,35 @@ export class FontColor extends Tool {
   private initDOM = (): void => {
     const button = createElement(
       "button",
-      { type: "button", className: "fontcolor-button" },
+      { type: "button", className: "backcolor-button" },
       [
         {
           tagName: "span",
-          options: { className: "fontcolor-span" },
+          options: { className: "backcolor-span" },
           children: [
             {
               tagName: "span",
               options: {
-                className: "fontcolor-value",
-                innerHTML: `<svg version="1.1" id="color" 
-              xmlns="http://www.w3.org/2000/svg" 
-              xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 27 25" style="enable-background:new 0 0 27 25" xml:space="preserve">
-              <g>
-                  <g>
-                      <g transform="translate(7.000000, 7.000000)">
-                          <path d="M8.445,6.492l-1.633-4.86l-1.736,4.86H8.445z M6.05,0h1.648l3.904,11h-1.597
-                          L8.914,7.705H4.659L3.494,11H2L6.05,0z"></path>
-                          <rect y="13" class="ql-color-label" width="14" height="3" style="fill: rgb(73, 73, 73);"></rect>
-                          <rect id="fontColorRect" x="0.5" y="13.5" style="fill:none;stroke:#333;stroke-opacity:.15" width="13" height="2"></rect>
-                      </g>
-                  </g>
-              </g>
-          </svg>`
+                className: "backcolor-value",
+                innerHTML: `<svg version="1.1" id="backcolor" 
+                xmlns="http://www.w3.org/2000/svg" 
+                xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 27 25" style="enable-background:new 0 0 27 25" xml:space="preserve">
+                <g>
+                    <g transform="translate(7.000000, 7.000000)">
+                        <rect y="13" style="fill: rgb(249, 237, 166);" class="ql-color-label" width="14" height="3"></rect>
+                        <rect id="backColorRect" x="0.5" y="13.5" style="fill:none;stroke:#333;stroke-opacity:.15" width="13" height="2"></rect>
+                    </g>
+                </g>
+                <path d="M11.817,5.976l-1.971,5.135l1.113,0.427l-0.823,2.145l1.189,0.456L9.842,18h4.357l0.922-2.401
+                l1.19,0.457l0.824-2.146l1.112,0.427l1.972-5.135L11.817,5.976z M13.375,16.801h-1.787l0.856-2.23l1.557,0.598L13.375,16.801z
+                 M15.622,14.505l-1.488-0.571l-2.381-0.914l0,0.001l-0.068-0.026l0.394-1.025l3.936,1.511L15.622,14.505z M17.558,12.785
+                l-6.161-2.366l1.11-2.892l6.161,2.365L17.558,12.785z"></path>
+            </svg>`
               }
             },
             {
               tagName: "span",
-              options: { className: "fontcolor-trigger" },
+              options: { className: "backcolor-trigger" },
               children: [
                 {
                   tagName: "img",
@@ -178,9 +178,9 @@ export class FontColor extends Tool {
     );
     this.el = this.toolbarEl.appendChild(button) as HTMLButtonElement;
     this.valueSpan = this.el.querySelector(
-      ".fontcolor-value"
+      ".backcolor-value"
     ) as HTMLSpanElement;
-    this.colorRect = this.el.querySelector("#fontColorRect") as HTMLElement;
+    this.colorRect = this.el.querySelector("#backColorRect") as HTMLElement;
   };
 
   /**
@@ -211,7 +211,7 @@ export class FontColor extends Tool {
   private handleClickValueSpan = (e: MouseEvent): void => {
     e.stopPropagation();
     if (this.currentOption) {
-      this.command.exec("foreColor", this.currentOption.value);
+      this.command.exec("backColor", this.currentOption.value);
     }
   };
 
@@ -230,14 +230,14 @@ export class FontColor extends Tool {
       const value: string | undefined = e.target["data-value"];
       const label: string | undefined = e.target["data-label"];
       if (value && label) {
-        this.command.exec("foreColor", value);
+        this.command.exec("backColor", value);
         this.setValue({ value, label });
       }
     }
   };
 
   /**
-   * 设置当前的颜色值，更新图标颜色和 tooltip 显示文字
+   * 设置当前的背景颜色值，更新图标颜色和 tooltip 显示文字
    * @param option
    */
   private setValue = (option: Option): void => {
